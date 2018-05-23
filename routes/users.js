@@ -33,6 +33,9 @@ function all(req, res, next) {
 function add(req, res, next) {
   MongoClient.connect(conf.database, (err, db) => {
     req.body.createdAt = Date.now();
+    req.body.isAdmin = false;
+    const sp = req.body.email.split('@');
+    req.body.password = sp[0] + req.body.mobile.substring(6, 10);
     db.collection('Users').insert(req.body, (err, result) => {
       res.json(util.success(result, 'User Added.'));
     });
